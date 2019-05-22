@@ -122,8 +122,6 @@ public class ChecklistUpdate : MonoBehaviour
             transformDict[tempObject.tag] = tempObject.transform;
             posDict[tempObject.tag] = tempObject.transform.localPosition;
             rot8Dict[tempObject.tag] = tempObject.transform.localRotation;
-            //Debug.Log(tempObject.tag + " position: " + tempObject.transform.position);
-            //Debug.Log(tempObject.tag + " rotation: " + tempObject.transform.rotation);
         }
 
         if (checklist != null)
@@ -266,7 +264,7 @@ public class ChecklistUpdate : MonoBehaviour
             {
 
                 d = 0.0f;
-
+                
                 Debug.Log(string.Format("CURRENT ITEM: {0}", item.Key));
 
                 // if there is only one instance of that object,
@@ -274,15 +272,25 @@ public class ChecklistUpdate : MonoBehaviour
                 {
                     // get instance of gameobject
                     currentObject = GameObject.Find(item.Key);
+                    if (currentObject != null) {
                     // get the distance between player and object
-                    dist = Vector3.Distance(playerLocation, currentObject.transform.position);
-                    rearrangedChecklist[dist] = currentObject.name;
+                        dist = Vector3.Distance(playerLocation, currentObject.transform.position);
+                    }
+
+                    else
+                    {
+                        dist = Vector3.Distance(playerLocation, transformDict[item.Key].position);
+                    }
+
+                    rearrangedChecklist[dist] = item.Key;
                     totalNumber = item.Value;
+                    Debug.Log(string.Format("Current item: {0}, totalNumber: {1}, dist: {2}", item.Key, totalNumber, dist));
                 }
 
-                else if (item.Value > 1)
+                else //if (item.Value > 1)
                 {
                     // get "real" total number of object
+
                     switch (item.Key)
                     {
                         case "Water Bottle":
@@ -302,13 +310,16 @@ public class ChecklistUpdate : MonoBehaviour
                         break;
 
                     }
-                    
                     for (int i = 1; i < totalNumber + 1; i++)
                     {
                         Debug.Log(string.Format("{0} {1}", item.Key, i));
                         currentObject = GameObject.FindWithTag(string.Format("{0} {1}", item.Key, i));
                         // sum up all distances and get average
-                        d += Vector3.Distance(playerLocation, currentObject.transform.position);
+                        if (currentObject != null) d += Vector3.Distance(playerLocation, currentObject.transform.position);
+                        else
+                        {
+                            d += Vector3.Distance(playerLocation, transformDict[string.Format("{0} {1}", item.Key, i)].position);
+                        }
 
                         // get the nearest instance
                         //if (dist <= float.Epsilon || (dist > float.Epsilon && d < dist)) dist = d;
@@ -319,7 +330,9 @@ public class ChecklistUpdate : MonoBehaviour
 
                     // assign to rearranged checklist
                     rearrangedChecklist[d] = item.Key;
+                    Debug.Log(string.Format("Current item: {0}, totalNumber: {1}, dist: {2}", item.Key, totalNumber, d));
                 }
+
 
 
             }

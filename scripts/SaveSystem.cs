@@ -18,7 +18,8 @@ public static class SaveSystem
         
         string path = Application.persistentDataPath + "/save";
         string txtpath = Application.persistentDataPath + "/" + player.playerID.ToString() + ".txt";
-
+        
+        Debug.Log("Path: " + path);
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -78,6 +79,7 @@ public static class SaveSystem
     public static PlayerData LoadPlayer(string playerID)
     {
         string path = Application.persistentDataPath + "/save/" + playerID + ".save";
+        Debug.Log("Path: " + path);
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

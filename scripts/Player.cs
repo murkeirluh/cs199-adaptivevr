@@ -68,6 +68,7 @@ public class Player : MonoBehaviour
     public void AddToPlayerBackpack(GameObject item)
     {
         backpackItems[item.tag] = item.name;
+        Debug.Log("Added to bag: " + item.tag);
     }
 
     // initializes checklist for user
@@ -181,6 +182,12 @@ public class Player : MonoBehaviour
         waterCount = data.waterCount;
         toysCount = data.toysCount;
         medsCount = data.medsCount;
+
+        for (int i = 0; i < data.backpackItems.Length; i++)
+        {
+            backpackItems[data.backpackItemTags[i]] = data.backpackItems[i];
+            Debug.Log(backpackItems[data.backpackItemTags[i]]);
+        }
 
         // based on items in backpack, fix the checklist
         FixChecklist();

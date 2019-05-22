@@ -23,10 +23,13 @@ public class SuppliesKitGame : MonoBehaviour
     // 420 seconds == 7 minutes remaining (8 minutes passed)
     public int threshold;
 
+    // total number of items in room
     private int total;
+    // user's progress
     private float progress;
     
     private int seconds;
+    // if items already collected have been destroyed
     private bool destroyed;
 
     // audio
@@ -36,7 +39,9 @@ public class SuppliesKitGame : MonoBehaviour
 
     void Awake()
     {
+        // set to false on startup 
         destroyed = false;
+        // get the sound effects for the supplies kit game
         sfx = GameObject.Find("Supplies").GetComponents<AudioSource>();
         correct = sfx[0];
         completed = sfx[1];
@@ -52,14 +57,13 @@ public class SuppliesKitGame : MonoBehaviour
 
         total = 0;
         seconds = 0;
-        // !?!??!?! 
         debug = false;
 
         total = GameObject.Find("Subtext").GetComponent<ChecklistUpdate>().GetTotal();
         progress = 0.0f;
 
         if (debug) {
-            threshold = 870; 
+            threshold = 890; 
         }
         else {
             threshold = 420; 
@@ -94,7 +98,6 @@ public class SuppliesKitGame : MonoBehaviour
         // destroy all those in player backpack if game is loaded
         if (!destroyed && GameObject.Find("Game").GetComponent<Launcher>().mode == "Load" && GameObject.Find("Game").GetComponent<Player>().backpackItems != null && GameObject.Find("Game").GetComponent<Player>().backpackItems.Count > 0)
         {
-
             GameObject toDestroy;
             foreach (KeyValuePair<string, string> item in GameObject.Find("Game").GetComponent<Player>().backpackItems)
             {
